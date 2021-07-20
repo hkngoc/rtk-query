@@ -1,6 +1,6 @@
 {
   "name": "@hkngoc/rtk-query",
-  "version": "0.1.0",
+  "version": "1.6.1",
   "description": "Another way to use endpoint of redux-toolkit/rtk-query",
   "repository": {
     "type": "git",
