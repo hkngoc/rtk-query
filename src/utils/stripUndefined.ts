@@ -1,6 +1,6 @@
 import { isPlainObject } from './isPlainObject';
 
-export const stripUndefined = (obj) => {
+export const stripUndefined = (obj: any) => {
   if (!isPlainObject(obj)) {
     return obj;
   }

@@ -1,3 +1,3 @@
-export const withoutTrailingSlash = (url) => {
+export const withoutTrailingSlash = (url: any) => {
   return url.replace(/\/$/, '')
 };

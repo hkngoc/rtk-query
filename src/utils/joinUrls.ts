@@ -2,7 +2,7 @@ import {isAbsoluteUrl } from './isAbsoluteUrl';
 import { withoutLeadingSlash } from './withoutLeadingSlash';
 import { withoutTrailingSlash } from './withoutTrailingSlash';
 
-export const joinUrls = (base, url) => {
+export const joinUrls = (base: any, url: any) => {
   if (!base) {
     return url;
   }
