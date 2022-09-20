@@ -1,44 +1,44 @@
 import { last, pick } from 'lodash';
 import createDispatchable from './createDispatchable';
 
-export const createApi = (options) => {
+export const createApi = (options: any) => {
   const { endpoints, baseQuery } = options;
 
   const endPointBuilder = {
-    query: (opts) => {
+    query: (opts: any) => {
       const {
-        query,  
+        query,
         fetchFn,
         transformResponse,
       } = opts;
 
-      return (...args) => {
-        const lastArg = last(args, {});
+      return (...args: any[]) => {
+        const lastArg = last(args);
         const arg = query(...args);
 
         return baseQuery({
           ...arg,
-        }, { ...pick(lastArg, ["getState"]), fetchFn, transformResponse });
+        }, { ...pick(lastArg, ["getState", "extra", "endpoint", "type"]), fetchFn, transformResponse });
 
       };
     }
   };
 
   const dispatcherBuilder = {
-    query: (opts) => {
+    query: (opts: any) => {
       const {
-        query,  
+        query,
         fetchFn,
         transformResponse,
       } = opts;
 
-      const fn = (...args) => {
-        const lastArg = last(args, {});
+      const fn = (...args: any[]) => {
+        const lastArg = last(args);
         const arg = query(...args);
 
         return baseQuery({
           ...arg,
-        }, { ...pick(lastArg, ["getState"]), fetchFn, transformResponse });
+        }, { ...pick(lastArg, ["getState", "extra", "endpoint", "type"]), fetchFn, transformResponse });
       };
 
       return createDispatchable(fn);

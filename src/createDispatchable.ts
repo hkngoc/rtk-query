@@ -1,5 +1,5 @@
-export const createDispatchable = (fn) => {
-  return (...args) => async (dispatch, getState) => {
+export const createDispatchable = (fn: any) => {
+  return (...args: any[]) => async (dispatch: any, getState: any) => {
 
     return await fn.apply(null, [...args, { getState }]);
   };

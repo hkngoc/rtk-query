@@ -1,4 +1,4 @@
-export const isPlainObject = (value) => {
+export const isPlainObject = (value: any) => {
   if (typeof value !== 'object' || value === null) return false;
 
   let proto = value;

@@ -1,6 +1,6 @@
-import { reduce }from 'lodash';
+import { reduce } from 'lodash';
 
-export const buildEndPoint = (apis) => (build) => {
+export const buildEndPoint = (apis: any) => (build: any) => {
   return reduce(apis, (result, v, k) => {
     if (k) {
       if ((typeof v) == "function") {

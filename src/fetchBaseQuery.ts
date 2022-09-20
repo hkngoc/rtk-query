@@ -6,13 +6,13 @@ import {
 } from './utils';
 
 // @ts-ignore
-const defaultFetchFn = (...args) => fetch(...args);
+const defaultFetchFn = (...args: any[]) => fetch(...args);
 
-const defaultValidateStatus = (response) => {
+const defaultValidateStatus = (response: any) => {
   return response.status >= 200 && response.status <= 299;
 };
 
-const handleResponse = async (response, responseHandler) => {
+const handleResponse = async (response: any, responseHandler: any) => {
   if (typeof responseHandler === 'function') {
     return responseHandler(response);
   }
@@ -29,7 +29,7 @@ const handleResponse = async (response, responseHandler) => {
 
 export const fetchBaseQuery = ({
   baseUrl,
-  prepareHeaders = (x) => x,
+  prepareHeaders = (x: any) => x,
   fetchFn = defaultFetchFn,
   ...baseFetchOptions
 }) => {
@@ -39,21 +39,26 @@ export const fetchBaseQuery = ({
     )
   }
 
-  return async (arg, {
-    getState,
-    transformResponse = (r) => r,
-  }) => {
+  return async (arg: any, api: any) => {
+    const {
+      getState,
+      extra,
+      endpoint,
+      type,
+      transformResponse = (r: any) => r,
+    } = api;
     let meta = {};
     let {
       url,
-      method = "GET",
+      method = 'GET',
       headers = new Headers({}),
       body = undefined,
       params = undefined,
-      responseHandler = "json",
+      responseHandler = 'json',
+      transformResponse: innerTransformResponse = undefined,
       validateStatus = defaultValidateStatus,
       ...rest
-    } = typeof arg == "string" ? { url: arg } : arg;
+    } = typeof arg == 'string' ? { url: arg } : arg;
 
     const config = {
       ...baseFetchOptions,
@@ -63,10 +68,10 @@ export const fetchBaseQuery = ({
     };
 
     // @ts-ignore
-    config.headers = await prepareHeaders(new Headers(stripUndefined(headers)), { getState });
+    config.headers = await prepareHeaders(new Headers(stripUndefined(headers)), { getState, extra, endpoint, type, });
 
     if (!config.headers.has('content-type') && isJsonifiable(body)) {
-      config.headers.set("content-type", "application/json");
+      config.headers.set('content-type', "application/json");
     }
 
     if (body && isJsonContentType(config.headers)) {
@@ -86,7 +91,7 @@ export const fetchBaseQuery = ({
     const requestClone = request.clone()
     // meta = { request: requestClone }
 
-    let response;
+    let response: any;
     try {
       response = await fetchFn(request)
     } catch (e) {
@@ -102,7 +107,7 @@ export const fetchBaseQuery = ({
 
     // meta.response = responseClone;
 
-    let resultData;
+    let resultData: any;
     try {
       resultData = await handleResponse(response, responseHandler)
     } catch (e) {
@@ -117,9 +122,10 @@ export const fetchBaseQuery = ({
       }
     }
 
-    let transformed;
+    let transformed: any;
     try {
-      transformed = await transformResponse(resultData);
+      const transformFn = innerTransformResponse || transformResponse;
+      transformed = await transformFn(resultData);
     } catch (e) {
       return {
         error: {
