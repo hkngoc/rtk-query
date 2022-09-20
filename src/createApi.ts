@@ -30,6 +30,7 @@ export const createApi = (options: any) => {
         query,
         fetchFn,
         transformResponse,
+        endpoint,
       } = opts;
 
       const fn = (...args: any[]) => {
@@ -38,7 +39,7 @@ export const createApi = (options: any) => {
 
         return baseQuery({
           ...arg,
-        }, { ...pick(lastArg, ["getState", "extra", "endpoint", "type"]), fetchFn, transformResponse });
+        }, { ...pick(lastArg, ["getState", "extra", "endpoint", "type"]), endpoint, fetchFn, transformResponse });
       };
 
       return createDispatchable(fn);
